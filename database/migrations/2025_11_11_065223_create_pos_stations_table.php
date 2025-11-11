@@ -20,10 +20,6 @@ return new class extends Migration
             $table->timestamp('last_sync')->nullable();
             $table->timestamps();
         });
-
-        Schema::table('pos_stations', function (Blueprint $table) {
-            $table->foreignId('branch_id')->constrained('branches')->onDelete('cascade');
-        });
     }
 
 

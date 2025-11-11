@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('name', 100);
             $table->string('email', 100)->nullable();
+            $table->timestamp('email_verified_at')->nullable();
             $table->string('phone', 30)->nullable();
             $table->foreignId('branch_id')->nullable()->constrained('branches')->nullOnDelete();
             $table->boolean('is_active')->default(true);

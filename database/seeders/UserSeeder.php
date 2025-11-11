@@ -26,7 +26,7 @@ class UserSeeder extends Seeder
         ], [
             'name' => 'Administrator',
             'email' => 'admin@smartstock.local',
-            'password' => Hash::make('123456'),
+            'password' => Hash::make('12345678'),
             'is_active' => true,
             'role_id' => $role->id,
         ]);

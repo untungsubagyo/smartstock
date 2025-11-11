@@ -25,6 +25,11 @@ class ItemStock extends Model
         'last_update' => 'datetime',
     ];
 
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class);
+    }
+
     public function item()
     {
         return $this->belongsTo(Item::class);

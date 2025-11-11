@@ -2,53 +2,67 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\BranchResource\Pages;
-use App\Filament\Resources\BranchResource\RelationManagers;
+use App\Filament\Resources\BranchessResource\Pages;
 use App\Models\Branch;
-use Filament\Resources\Resource;
-use Filament\Forms\Form;
-use Filament\Tables\Table;
 use Filament\Forms;
+use Filament\Forms\Form;
+use Filament\Resources\Resource;
 use Filament\Tables;
-
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class BranchResource extends Resource
+class BranchesResource extends Resource
 {
     protected static ?string $model = Branch::class;
-    protected static ?string $navigationLabel = 'Cabang';
+
     protected static ?string $navigationIcon = 'heroicon-o-building-office';
     protected static ?string $navigationGroup = 'Master Data';
+    protected static ?string $navigationLabel = 'Cabang (Branches)';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\TextInput::make('code')
+                    ->label('Kode Cabang')
                     ->required()
                     ->maxLength(10),
+
                 Forms\Components\TextInput::make('name')
+                    ->label('Nama Cabang')
                     ->required()
                     ->maxLength(100),
+
                 Forms\Components\Textarea::make('address')
-                    ->columnSpanFull(),
+                    ->label('Alamat')
+                    ->required(),
+
                 Forms\Components\TextInput::make('city')
-                    ->maxLength(100),
+                    ->label('Kota')
+                    ->required(),
+
                 Forms\Components\TextInput::make('province')
-                    ->maxLength(100),
+                    ->label('Provinsi'),
+
                 Forms\Components\TextInput::make('phone')
-                    ->tel()
-                    ->maxLength(30),
+                    ->label('Nomor Telepon'),
+
                 Forms\Components\TextInput::make('email')
-                    ->email()
-                    ->maxLength(100),
-                Forms\Components\TextInput::make('logo_path')
-                    ->maxLength(255),
+                    ->label('Email')
+                    ->email(),
+
+                Forms\Components\FileUpload::make('logo_path')
+                    ->label('Logo Cabang')
+                    ->directory('branches/logos')
+                    ->image(),
+
                 Forms\Components\Toggle::make('is_main')
-                    ->required(),
+                    ->label('Cabang Utama'),
+
                 Forms\Components\Toggle::make('is_active')
-                    ->required(),
+                    ->label('Aktif')
+                    ->default(true),
             ]);
     }
 
@@ -57,58 +71,46 @@ class BranchResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('code')
+                    ->label('Kode')
+                    ->sortable()
                     ->searchable(),
+
                 Tables\Columns\TextColumn::make('name')
+                    ->label('Nama')
+                    ->sortable()
                     ->searchable(),
+
                 Tables\Columns\TextColumn::make('city')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('province')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('phone')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('email')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('logo_path')
-                    ->searchable(),
+                    ->label('Kota'),
+
                 Tables\Columns\IconColumn::make('is_main')
+                    ->label('Utama')
                     ->boolean(),
+
                 Tables\Columns\IconColumn::make('is_active')
+                    ->label('Aktif')
                     ->boolean(),
+
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-            ])
-            ->filters([
-                //
+                    ->label('Dibuat')
+                    ->dateTime('d M Y H:i')
+                    ->sortable(),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                Tables\Actions\DeleteBulkAction::make(),
             ]);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListBranches::route('/'),
-            'create' => Pages\CreateBranch::route('/create'),
-            'edit' => Pages\EditBranch::route('/{record}/edit'),
+            'index' => Pages\ListBranchesses::route('/'),
+            'create' => Pages\CreateBranchess::route('/create'),
+            'edit' => Pages\EditBranchess::route('/{record}/edit'),
         ];
     }
 }
